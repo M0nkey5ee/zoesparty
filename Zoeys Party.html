@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoe's Party</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        #game-container {
+            margin: auto;
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #5c5c8a;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #5c5c8a;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #494973;
+        }
+        #narrative, #choices, #status {
+            text-align: left;
+            margin-top: 20px;
+        }
+        #status p {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-bar-inner {
+            height: 20px;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+        #hydration-level-bar {
+            background-color: #4caf50;
+        }
+        #bladder-level-bar {
+            background-color: #ff9800;
+        }
+.decision {
+    color: #5c5c8a; /* Adjust the color as needed */
+    font-style: italic;
+    margin-bottom: 20px;
+}
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Zoe's Party</h1>
+        <div id="introduction">
+            <p>Welcome to Zoe's Party! Help Zoe manage her hydration and bladder before, during and after a crazy party. Make the right choices to ensure she enjoys the party without any embarrassing moments.</p>
+            <button id="start-button">Start the Game</button>
+        </div>
+        <div id="gameplay" style="display: none;">
+            <div id="narrative"></div>
+            <div id="choices"></div>
+            <div id="status">
+                <p>Hydration Level: <span id="hydration-level">0</span>/1200 ml</p>
+                <p>Bladder Level: <span id="bladder-level">0</span>/950 ml</p>
+                <div class="progress-bar">
+                    <div id="hydration-level-bar" class="progress-bar-inner" style="width: 0%;"></div>
+                </div>
+                <div class="progress-bar">
+                    <div id="bladder-level-bar" class="progress-bar-inner" style="width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+        <div id="end-screen" style="display: none;">
+            <p id="end-message"></p>
+            <button id="replay-button">Replay</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startButton = document.getElementById('start-button');
+            const replayButton = document.getElementById('replay-button');
+            const introduction = document.getElementById('introduction');
+            const gameContainer = document.getElementById('gameplay');
+            const endScreen = document.getElementById('end-screen');
+            const narrative = document.getElementById('narrative');
+            const choices = document.getElementById('choices');
+            const hydrationLevelElement = document.getElementById('hydration-level');
+            const bladderLevelElement = document.getElementById('bladder-level');
+            const hydrationLevelBar = document.getElementById('hydration-level-bar');
+            const bladderLevelBar = document.getElementById('bladder-level-bar');
+            const endMessage = document.getElementById('end-message');
+
+            let hydrationLevel = 0;
+            let bladderLevel = 0;
+
+            function updateStatus() {
+                hydrationLevelElement.textContent = hydrationLevel;
+                bladderLevelElement.textContent = bladderLevel;
+                hydrationLevelBar.style.width = `${(hydrationLevel / 1200) * 100}%`;
+                bladderLevelBar.style.width = `${(bladderLevel / 950) * 100}%`;
+            }
+
+            function checkStatus() {
+                if (bladderLevel >= 950) {
+                    endGame(false);
+                } else if (hydrationLevel >= 1200) {
+                    endGame(true);
+                }
+            }
+
+            function endGame(success) {
+                gameContainer.style.display = 'none';
+                endScreen.style.display = 'block';
+                if (success) {
+                    endMessage.textContent = 'Congratulations! Zoe enjoyed the party without any issues.';
+                } else {
+                    endMessage.textContent = 'Oops! Zoe couldnt hold it any longer.';
+                }
+            }
+
+function startGame() {
+    introduction.style.display = 'none';
+    gameContainer.style.display = 'block';
+    narrative.innerHTML = 'As the clock strikes 4 pm, the afternoon sun casts a warm glow through Zoe\'s window, painting her room in hues of amber and gold. With the promise of the evening\'s festivities lingering in the air, Zoe finds herself at a crossroads, each path beckoning with its own allure. \
+<ul> \
+<li><strong>Option 1: Pub:</strong></li> \
+The lively ambiance of the local pub calls out to Zoe, promising camaraderie and laughter amidst the clink of glasses and the hum of conversation. Should she venture into the embrace of familiar faces, savoring the taste of anticipation with every sip? \
+<li><strong>Option 2: Cinema:</strong></li> \
+Alternatively, the allure of cinematic escapades tempts Zoe, offering the chance to lose herself in the magic of storytelling. Will she surrender to the silver screen\'s embrace, allowing herself a brief respite before the night\'s revelry? \
+<li><strong>Option 3: Home:</strong></li> \
+Or perhaps solitude is the elixir Zoe seeks, finding solace in the quiet comfort of her own company. With the aroma of freshly brewed coffee or the jolt of energy drinks to fuel her contemplation, will she relish this moment of introspection before the evening unfolds? \
+</ul> \
+As Zoe contemplates her choices, the world outside hums with the promise of possibility, each option a stepping stone on the path to tonight\'s adventure. With her decision poised to shape the course of her evening, she takes a deep breath, ready to embark on the first leg of her journey. \
+What path will Zoe choose as she sets the stage for the night ahead?';
+    choices.innerHTML = '<button onclick="selectOption(\'pub\')">Go to the Pub</button> \
+                         <button onclick="selectOption(\'cinema\')">Go to the Cinema</button> \
+                         <button onclick="selectOption(\'home\')">Stay Home</button>';
+}
+
+function selectOption(option) {
+    narrative.textContent = 'Zoe decides to ' + (option === 'pub' ? 'go to the pub. It\'s time to choose an outfit.' : option === 'cinema' ? 'go to the cinema. What should she wear for a movie night?' : 'stay home. Which comfy outfit should she pick?');
+    choices.innerHTML = '<button onclick="selectOutfit(\'casual\')">Casual</button> \
+                         <button onclick="selectOutfit(\'fancy\')">Fancy</button> \
+                         <button onclick="selectOutfit(\'comfortable\')">Comfortable</button>';
+}
+
+// You will need to define the 'selectOutfit' function to handle the choice of outfit.
+function selectOutfit(style) {
+    // Logic to continue based on outfit choice
+}
+function selectOutfit(style) {
+    narrative.innerHTML = 'Now that she chose her next step she has to decide on what she wants to wear: <br>\
+    <strong>Option 1: Hard Option - Tight Bodysuit and Skinny Jeans with Complicated Belt:</strong> \
+    Zoe could opt for the daring allure of a tight bodysuit, hugging her curves in all the right places, paired with sleek skinny jeans. The ensemble is accentuated by a large and intricately designed belt, adding a touch of complexity to her look. While undeniably sexy, the snug fit of the bodysuit and the intricate nature of the belt might pose a challenge during moments of desperation, heightening the thrill for Zoe as she navigates the evening\'s festivities.<br>\
+    <strong>Option 2: Medium Option - Thong, Miniskirt, and Tight Top without a Bra:</strong> \
+    Alternatively, Zoe could embrace the seductive charm of a thong nestled beneath a daring miniskirt, paired with a form-fitting top that leaves little to the imagination. Opting to forgo a bra adds an extra layer of risqué allure to her ensemble. This outfit strikes a balance between sexiness and practicality, offering Zoe freedom of movement while still indulging in the thrill of anticipation as she navigates the evening\'s events.<br>\
+    <strong>Option 3: Easy Option - Yoga Pants/Leggings and Comfortable Hoodie:</strong> \
+    For a more relaxed approach, Zoe could slip into the cozy comfort of yoga pants or leggings paired with an oversized, plush hoodie. This laid-back ensemble prioritizes comfort without sacrificing style, allowing Zoe to move with ease throughout the evening\'s festivities. While perhaps less overtly sexy than the other options, the relaxed fit of this outfit provides Zoe with a sense of freedom and ease, perfect for embracing the thrill of anticipation without unnecessary hindrances.';
+    choices.innerHTML = '<button onclick="prepareForEvent(\'hard\')">Choose Tight Bodysuit and Jeans</button> \
+                         <button onclick="prepareForEvent(\'medium\')">Choose Miniskirt and Top</button> \
+                         <button onclick="prepareForEvent(\'easy\')">Choose Leggings and Hoodie</button>';
+}
+
+function prepareForEvent(outfit) {
+    if (outfit === 'hard' || outfit === 'medium') {
+        narrative.innerHTML = 'Zoe\'s choice sets the tone for an exciting evening. What should she take with her?';
+        choices.innerHTML = '<button onclick="selectItem(\'drink\')">Choose a Drink</button> \
+                             <button onclick="selectItem(\'bag\')">Pack a Bag</button>';
+    } else {
+        narrative.innerHTML = 'Comfortably dressed, Zoe is ready to enjoy the evening. What should she bring along?';
+        choices.innerHTML = '<button onclick="selectItem(\'drink\')">Choose a Drink</button> \
+                             <button onclick="selectItem(\'bag\')">Pack a Bag</button>';
+    }
+    updateStatus();
+    checkStatus();
+}
+
+// Assuming functions to update and check status are already implemented
+function updateStatus() {
+    // Updates the status of hydration and bladder levels or other game mechanics
+}
+
+function checkStatus() {
+    // Checks game conditions to decide if any events should be triggered
+}
+
+function selectItem(item) {
+    if (item === 'drink') {
+        narrative.innerHTML = 'Zoe decides to take a drink. Which one will it be?';
+        choices.innerHTML = '<button onclick="selectDrink(\'water\')">Water</button> \
+                             <button onclick="selectDrink(\'juice\')">Juice</button>';
+    } else {
+        narrative.innerHTML = 'Zoe packs her bag. What essentials does she need?';
+        choices.innerHTML = '<button onclick="packItem(\'phone\')">Phone</button> \
+                             <button onclick="packItem(\'keys\')">Keys</button>';
+    }
+}
+
+function selectDrink(drinkType) {
+    if (drinkType === 'water') {
+        narrative.innerHTML = 'Zoe decides to stay hydrated. She mixes a bit of cranberry juice with water for a refreshing drink to enjoy on her way.';
+        choices.innerHTML = '<button onclick="finalizeChoices()">Continue</button>';
+    } else if (drinkType === 'juice') {
+        narrative.innerHTML = 'Zoe opts for a boost of energy. She grabs a large can of energy drink to sip as she heads out.';
+        choices.innerHTML = '<button onclick="finalizeChoices()">Continue</button>';
+    } else {
+        narrative.innerHTML = 'Zoe needs a warm start. She brews a quick coffee to take with her, enjoying the warmth and aroma.';
+        choices.innerHTML = '<button onclick="finalizeChoices()">Continue</button>';
+    }
+    updateStatus();
+    checkStatus();
+}
+
+function packItem(item) {
+    if (item === 'phone') {
+        narrative.innerHTML = 'Zoe can\'t go without her phone. What should she drink on her way?';
+        choices.innerHTML = '<button onclick="selectDrink(\'coffee\')">Brew a coffee</button> \
+                             <button onclick="selectDrink(\'energy\')">Grab an energy drink</button> \
+                             <button onclick="selectDrink(\'water\')">Mix cranberry juice with water</button>';
+    } else {
+        narrative.innerHTML = 'With keys in hand, Zoe is almost ready to leave. What will she drink on the way?';
+        choices.innerHTML = '<button onclick="selectDrink(\'coffee\')">Brew a coffee</button> \
+                             <button onclick="selectDrink(\'energy\')">Grab an energy drink</button> \
+                             <button onclick="selectDrink(\'water\')">Mix cranberry juice with water</button>';
+    }
+}
+
+function finalizeChoices() {
+    narrative.innerHTML = 'Zoe is all set for the evening. With her drink in hand, she steps out, ready for whatever the night may bring.';
+    choices.innerHTML = '';
+}
+
+// Assuming functions to update and check status are already implemented
+function updateStatus() {
+    // Update any necessary status, like time, mood, or energy levels
+}
+
+function checkStatus() {
+    // Check if any critical thresholds are met that may affect the game's outcome
+}
+
+
+// Define the selectDrink and packItem functions as needed
+
+            function partyActivity(activity) {
+                if (activity === 'dance') {
+                    bladderLevel += 50; // Dancing increases bladder pressure
+                    narrative.textContent = 'Dancing is fun! But Zoe feels a bit more pressure now.';
+                } else if (activity === 'chat') {
+                    bladderLevel += 30; // Chatting is less strenuous
+                    narrative.textContent = 'Chatting is relaxing. Zoe feels less pressure.';
+                }
+                choices.innerHTML = '<button onclick="endGame(true)">End the party</button> <button onclick="endGame(false)">Find a bathroom</button>';
+                updateStatus();
+                checkStatus();
+            }
+
+            startButton.addEventListener('click', startGame);
+            replayButton.addEventListener('click', function() {
+                window.location.reload();
+            });
+
+            window.chooseDrink = chooseDrink;
+            window.partyActivity = partyActivity;
+        });
+    </script>
+</body>
+</html>
