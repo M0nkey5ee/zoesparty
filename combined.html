@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoe's Party Challenge</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        #game-container {
+            margin: auto;
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #5c5c8a;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #5c5c8a;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #494973;
+        }
+        #narrative, #choices, #status {
+            text-align: left;
+            margin-top: 20px;
+        }
+        #status p {
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress-bar-inner {
+            height: 20px;
+            border-radius: 5px;
+            transition: width 0.3s;
+        }
+        #hydration-level-bar {
+            background-color: #4caf50;
+        }
+        #bladder-level-bar {
+            background-color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Zoe's Party Challenge</h1>
+        <div id="introduction">
+            <p>Welcome to Zoe's Party Challenge! Help Zoe manage her hydration and bladder during a party. Make the right choices to ensure she enjoys the party without any embarrassing moments.</p>
+            <button id="start-button">Start the Game</button>
+        </div>
+        <div id="gameplay" style="display: none;">
+            <div id="narrative"></div>
+            <div id="choices"></div>
+            <div id="status">
+                <p>Hydration Level: <span id="hydration-level">0</span>/1200 ml</p>
+                <p>Bladder Level: <span id="bladder-level">0</span>/950 ml</p>
+                <div class="progress-bar">
+                    <div id="hydration-level-bar" class="progress-bar-inner" style="width: 0%;"></div>
+                </div>
+                <div class="progress-bar">
+                    <div id="bladder-level-bar" class="progress-bar-inner" style="width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+        <div id="end-screen" style="display: none;">
+            <p id="end-message"></p>
+            <button id="replay-button">Replay</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startButton = document.getElementById('start-button');
+            const replayButton = document.getElementById('replay-button');
+            const introduction = document.getElementById('introduction');
+            const gameContainer = document.getElementById('gameplay');
+            const endScreen = document.getElementById('end-screen');
+            const narrative = document.getElementById('narrative');
+            const choices = document.getElementById('choices');
+            const hydrationLevelElement = document.getElementById('hydration-level');
+            const bladderLevelElement = document.getElementById('bladder-level');
+            const hydrationLevelBar = document.getElementById('hydration-level-bar');
+            const bladderLevelBar = document.getElementById('bladder-level-bar');
+            const endMessage = document.getElementById('end-message');
+
+            let hydrationLevel = 0;
+            let bladderLevel = 0;
+
+            function updateStatus() {
+                hydrationLevelElement.textContent = hydrationLevel;
+                bladderLevelElement.textContent = bladderLevel;
+                hydrationLevelBar.style.width = `${(hydrationLevel / 1200) * 100}%`;
+                bladderLevelBar.style.width = `${(bladderLevel / 950) * 100}%`;
+            }
+
+            function checkStatus() {
+                if (bladderLevel >= 950) {
+                    endGame(false);
+                } else if (hydrationLevel >= 1200) {
+                    endGame(true);
+                }
+            }
+
+            function endGame(success) {
+                gameContainer.style.display = 'none';
+                endScreen.style.display = 'block';
+                if (success) {
+                    endMessage.textContent = 'Congratulations! Zoe enjoyed the party without any issues.';
+                } else {
+                    endMessage.textContent = 'Oops! Zoe couldnt hold it any longer.';
+                }
+            }
+
+            function startGame() {
+                introduction.style.display = 'none';
+                gameContainer.style.display = 'block';
+                narrative.textContent = 'Zoe is getting ready for the party. What should she drink?';
+                choices.innerHTML = '<button onclick="chooseDrink(200)">Water (200ml)</button> <button onclick="chooseDrink(300)">Juice (300ml)</button>';
+            }
+
+            function chooseDrink(amount) {
+                hydrationLevel += amount;
+                bladderLevel += amount * 0.8; // 80% of intake goes to bladder
+                narrative.textContent = 'Zoe is at the party. What should she do next?';
+                choices.innerHTML = '<button onclick="partyActivity(\'dance\')">Dance</button> <button onclick="partyActivity(\'chat\')">Chat</button>';
+                updateStatus();
+                checkStatus();
+            }
+
+            function partyActivity(activity) {
+                if (activity === 'dance') {
+                    bladderLevel += 50; // Dancing increases bladder pressure
+                    narrative.textContent = 'Dancing is fun! But Zoe feels a bit more pressure now.';
+                } else if (activity === 'chat') {
+                    bladderLevel += 30; // Chatting is less strenuous
+                    narrative.textContent = 'Chatting is relaxing. Zoe feels less pressure.';
+                }
+                choices.innerHTML = '<button onclick="endGame(true)">End the party</button> <button onclick="endGame(false)">Find a bathroom</button>';
+                updateStatus();
+                checkStatus();
+            }
+
+            startButton.addEventListener('click', startGame);
+            replayButton.addEventListener('click', function() {
+                window.location.reload();
+            });
+
+            window.chooseDrink = chooseDrink;
+            window.partyActivity = partyActivity;
+        });
+    </script>
+</body>
+</html>
