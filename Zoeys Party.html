@@ -166,10 +166,11 @@ function selectOption(option) {
                          <button onclick="selectOutfit(\'comfortable\')">Comfortable</button>';
 }
 
-// You will need to define the 'selectOutfit' function to handle the choice of outfit.
 function selectOutfit(style) {
-    // Logic to continue based on outfit choice
+    narrative.innerHTML = 'Zoe feels ' + (style === 'casual' ? 'comfortable and relaxed, perfect for a night out at the pub.' : style === 'fancy' ? 'elegant and ready for an evening at the cinema.' : 'cozy and ready to enjoy a quiet night at home.');
+    choices.innerHTML = '<button onclick="prepareForEvent()">Continue</button>'; // Placeholder for the next function
 }
+
 function selectOutfit(style) {
     narrative.innerHTML = 'Now that she chose her next step she has to decide on what she wants to wear: <br>\
     <strong>Option 1: Hard Option - Tight Bodysuit and Skinny Jeans with Complicated Belt:</strong> \
@@ -246,6 +247,13 @@ function packItem(item) {
                              <button onclick="selectDrink(\'water\')">Mix cranberry juice with water</button>';
     }
 }
+
+function nextAction(action) {
+    // Update narrative or gameplay based on the action
+    narrative.innerHTML = 'Zoe takes action: ' + action;
+    // Additional game logic here
+}
+
 
 function finalizeChoices() {
     narrative.innerHTML = 'Zoe is all set for the evening. With her drink in hand, she steps out, ready for whatever the night may bring.';
