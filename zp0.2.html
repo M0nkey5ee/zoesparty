@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoe's Party</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        #game-container {
+            margin: auto;
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 5px; /* Fast eckig */
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #5c5c8a;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #5c5c8a;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #494973;
+        }
+        .progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            width: 90%;
+            height: 20px;
+            margin: 10px auto;
+            position: relative;
+            font-size: 0.8rem;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 10px;
+        }
+        .progress-bar-inner {
+            border-radius: 3px;
+            transition: width 0.3s;
+            height: 100%;
+            width: 1px; /* Start minimal when at zero */
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            color: black;
+            font-weight: bold;
+        }
+        #hydration-level-bar {
+            background-color: #4caf50;
+        }
+        #bladder-level-bar {
+            background-color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Zoe's Party</h1>
+        <div id="introduction">
+            <button id="start-button">Start the Game</button>
+            <div class="progress-bar">
+                <div id="hydration-level-bar" class="progress-bar-inner" style="width: 1px;">Hydration: 0/1200 ml</div>
+            </div>
+            <div class="progress-bar">
+                <div id="bladder-level-bar" class="progress-bar-inner" style="width: 1px;">Bladder: 0/950 ml</div>
+            </div>
+        </div>
+        <div id="location-screen" style="display: none;">
+            <p>Choose a location:</p>
+            <button onclick="chooseLocation(1)">Pub</button>
+            <button onclick="chooseLocation(2)">Cinema</button>
+            <button onclick="chooseLocation(3)">Home</button>
+            <div class="progress-bar">
+                <div id="hydration-level-bar" class="progress-bar-inner" style="width: 1px;">Hydration: 0/1200 ml</div>
+            </div>
+            <div class="progress-bar">
+                <div id="bladder-level-bar" class="progress-bar-inner" style="width: 1px;">Bladder: 0/950 ml</div>
+            </div>
+        </div>
+        <div id="clothing-screen" style="display: none;">
+            <p>Choose your outfit:</p>
+            <button onclick="chooseClothing(1)">Casual</button>
+            <button onclick="chooseClothing(2)">Fancy</button>
+            <button onclick="chooseClothing(3)">Sporty</button>
+        </div>
+        <div id="final-screen" style="display: none;">
+            <p>Choose your drink:</p>
+            <button onclick="chooseDrink(1)">Coffee</button>
+            <button onclick="chooseDrink(2)">Energy</button>
+            <button onclick="chooseDrink(3)">Cranberry</button>
+        </div>
+        <div id="summary-screen" style="display: none;">
+            <p id="summary"></p>
+            <button id="next-page-button">Go to Next Page</button>
+        </div>
+    </div>
+<script>
+    let choices = {
+        location: '',
+        clothing: '',
+        drink: ''
+    };
+
+    document.getElementById('start-button').addEventListener('click', function() {
+        document.getElementById('introduction').style.display = 'none';
+        document.getElementById('location-screen').style.display = 'block';
+        updateBars();
+    });
+
+    function chooseLocation(option) {
+        choices.location = option;
+        document.getElementById('location-screen').style.display = 'none';
+        document.getElementById('clothing-screen').style.display = 'block';
+        updateBars();
+    }
+
+    function chooseClothing(option) {
+        choices.clothing = option;
+        document.getElementById('clothing-screen').style.display = 'none';
+        document.getElementById('final-screen').style.display = 'block';
+        updateBars();
+    }
+
+    function chooseDrink(option) {
+        choices.drink = option;
+        document.getElementById('final-screen').style.display = 'none';
+        document.getElementById('summary-screen').style.display = 'block';
+        document.getElementById('summary').textContent = `Your choices: Location ${choices.location}, Outfit ${choices.clothing}, Drink ${choices.drink}`;
+        setupNextPageButton();
+    }
+
+    function setupNextPageButton() {
+        const locationMap = {1: 'pub', 2: 'cinema', 3: 'home'};
+        const clothingMap = {1: 'ca', 2: 'fa', 3: 'sp'};
+        const drinkMap = {1: 'co', 2: 'en', 3: 'cra'};
+
+        const nextPageUrl = `${locationMap[choices.location]}${clothingMap[choices.clothing]}${drinkMap[choices.drink]}.html`;
+
+        const nextPageButton = document.getElementById('next-page-button');
+        nextPageButton.onclick = function() {
+            window.location.href = nextPageUrl;
+        };
+    }
+
+    function updateBars() {
+        // Einfache Logik, um die Bars graduell zu erhöhen
+        let hydrationWidth = parseInt(document.getElementById('hydration-level-bar').style.width) + 5;
+        let bladderWidth = parseInt(document.getElementById('bladder-level-bar').style.width) + 3;
+        document.getElementById('hydration-level-bar').style.width = `${hydrationWidth}px`;
+        document.getElementById('bladder-level-bar').style.width = `${bladderWidth}px`;
+        document.getElementById('hydration-level-bar').textContent = `Hydration: ${hydrationWidth * 12}/1200 ml`;
+        document.getElementById('bladder-level-bar').textContent = `Bladder: ${bladderWidth * 9.5}/950 ml`;
+    }
+</script>
+</body>
+</html>
