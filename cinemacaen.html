@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lets go to the cinema in a casual outfit with an energy in the hand!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        #game-container {
+            margin: auto;
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #5c5c8a;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #5c5c8a;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #494973;
+        }
+        .meter { 
+            height: 20px; /* Can be anything */
+            position: relative;
+            background: #555;
+            border-radius: 25px;
+            margin: 20px 0;
+            box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+        }
+        .meter > span {
+            display: block;
+            height: 100%;
+            border-radius: 20px;
+            background-color: rgb(43,194,83);
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Lets go to the cinema in a casual outfit with an energy in the hand!</h1>
+        <p> Dummytext </p>
+        <div class="meter">
+            <span id="hydration-meter" style="width: 0%"></span>
+        </div>
+        <div class="meter">
+            <span id="bladder-meter" style="width: 0%"></span>
+        </div>
+        <button onclick="drink('energy')">Drink Energy</button>
+        <button onclick="continueToNextPage()">Continue</button>
+    </div>
+
+    <script>
+        // Initialize hydration and bladder values
+        let hydration = 0;
+        let bladder = 0;
+        const hydrationMax = 1200;
+        const bladderMax = 950;
+
+        // Function to update hydration and bladder values
+        function updateValues() {
+            hydration = Math.min(hydration, hydrationMax);
+            bladder = Math.min(bladder, bladderMax);
+            document.getElementById('hydration-meter').style.width = `${(hydration / hydrationMax) * 100}%`;
+            document.getElementById('bladder-meter').style.width = `${(bladder / bladderMax) * 100}%`;
+        }
+
+        // Simulate Zoe drinking an energy drink
+        function drink(type) {
+            if (type === 'energy') {
+                hydration += 300;
+                bladder += 150;
+            }
+            updateValues();
+        }
+
+        // On page load, set the progress meters based on Zoe's current state
+        window.onload = function() {
+            updateValues();
+        };
+
+        // Prepare to pass Zoe's state to the next page
+        function continueToNextPage() {
+            // Here we would store the current state in a way that the next page can access
+            // For example, using query parameters or local storage
+            localStorage.setItem('hydration', hydration);
+            localStorage.setItem('bladder', bladder);
+
+            // Redirect to the next page
+            window.location.href = 'next_page.html?hydration=' + hydration + '&bladder=' + bladder;
+        }
+    </script>
+</body>
+</html>

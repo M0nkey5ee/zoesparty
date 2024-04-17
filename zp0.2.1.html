@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoe's Party</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        #game-container {
+            margin: auto;
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 5px; /* Fast eckig */
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #5c5c8a;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #5c5c8a;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #494973;
+        }
+        .progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            width: 90%;
+            height: 20px;
+            margin: 10px auto;
+            position: relative;
+            font-size: 0.8rem;
+            color: black;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding-left: 10px;
+        }
+        .progress-bar-inner {
+            border-radius: 3px;
+            transition: width 0.3s;
+            height: 100%;
+            width: 1px; /* Start minimal when at zero */
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            color: black;
+            font-weight: bold;
+        }
+        #hydration-level-bar {
+            background-color: #4caf50;
+        }
+        #bladder-level-bar {
+            background-color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <h1>Zoe's Party</h1>
+        <div id="introduction">
+            <button id="start-button">Start the Game</button>
+            <div class="progress-bar">
+                <div id="hydration-level-bar" class="progress-bar-inner" style="width: 1px;">Hydration: 0/1200 ml</div>
+            </div>
+            <div class="progress-bar">
+                <div id="bladder-level-bar" class="progress-bar-inner" style="width: 1px;">Bladder: 0/950 ml</div>
+            </div>
+        </div>
+        <div id="location-screen" style="display: none;">
+            <p>As the clock strikes 4 pm, the afternoon sun casts a warm glow through Zoe\'s window, painting her room in hues of amber and gold. With the promise of the evening\'s festivities lingering in the air, Zoe finds herself at a crossroads, each path beckoning with its own allure.
+<ul>
+<li><strong>Option 1: Pub:</strong></li>
+The lively ambiance of the local pub calls out to Zoe, promising camaraderie and laughter amidst the clink of glasses and the hum of conversation. Should she venture into the embrace of familiar faces, savoring the taste of anticipation with every sip?
+<li><strong>Option 2: Cinema:</strong></li>
+Alternatively, the allure of cinematic escapades tempts Zoe, offering the chance to lose herself in the magic of storytelling. Will she surrender to the silver screen\'s embrace, allowing herself a brief respite before the night\'s revelry?
+<li><strong>Option 3: Home:</strong></li>
+Or perhaps solitude is the elixir Zoe seeks, finding solace in the quiet comfort of her own company. With the aroma of freshly brewed coffee or the jolt of energy drinks to fuel her contemplation, will she relish this moment of introspection before the evening unfolds?
+</ul>
+As Zoe contemplates her choices, the world outside hums with the promise of possibility, each option a stepping stone on the path to tonight\'s adventure. With her decision poised to shape the course of her evening, she takes a deep breath, ready to embark on the first leg of her journey.
+What path will Zoe choose as she sets the stage for the night ahead?</p>
+<p style="color:orange;"><i>I think this will be an very interesting evening either way. I can already feel my spinther twitching out of joy because of what will come next - laet's make this hard as I love it sooo much!</i></p>
+<p style="color:navy;"><b>Zoes Body feels very relaxed and calm. Her bladder is empty and awaits a challenge.</b></p>
+            <button onclick="chooseLocation(1)">Pub</button>
+            <button onclick="chooseLocation(2)">Cinema</button>
+            <button onclick="chooseLocation(3)">Home</button>
+            <div class="progress-bar">
+                <div id="hydration-level-bar" class="progress-bar-inner" style="width: 1px;">Hydration: 0/1200 ml</div>
+            </div>
+            <div class="progress-bar">
+                <div id="bladder-level-bar" class="progress-bar-inner" style="width: 1px;">Bladder: 0/950 ml</div>
+            </div>
+        </div>
+        <div id="clothing-screen" style="display: none;">
+            <p>Choose your outfit:</p>
+            <p>Now that she chose her next step she has to decide on what she wants to wear: <br>
+<ul>
+    <strong><li>Option 1: Hard Option - Tight Bodysuit and Skinny Jeans with Complicated Belt:</li></strong>
+    Zoe could opt for the daring allure of a tight bodysuit, hugging her curves in all the right places, paired with sleek skinny jeans. The ensemble is accentuated by a large and intricately designed belt, adding a touch of complexity to her look. While undeniably sexy, the snug fit of the bodysuit and the intricate nature of the belt might pose a challenge during moments of desperation, heightening the thrill for Zoe as she navigates the evening's festivities.<br>
+    <strong><li>Option 2: Medium Option - Thong, Miniskirt, and Tight Top without a Bra:</li></strong>
+    Alternatively, Zoe could embrace the seductive charm of a thong nestled beneath a daring miniskirt, paired with a form-fitting top that leaves little to the imagination. Opting to forgo a bra adds an extra layer of risqué allure to her ensemble. This outfit strikes a balance between sexiness and practicality, offering Zoe freedom of movement while still indulging in the thrill of anticipation as she navigates the evening\'s events.<br>
+    <strong><li>Option 3: Easy Option - Yoga Pants/Leggings and Comfortable Hoodie:</li></strong>
+    For a more relaxed approach, Zoe could slip into the cozy comfort of yoga pants or leggings paired with an oversized, plush hoodie. This laid-back ensemble prioritizes comfort without sacrificing style, allowing Zoe to move with ease throughout the evening\'s festivities. While perhaps less overtly sexy than the other options, the relaxed fit of this outfit provides Zoe with a sense of freedom and ease, perfect for embracing the thrill of anticipation without unnecessary hindrances.</ul></p>
+<p style="color:orange;"><i>Hmmm. Let's see... The right choice of clothing will make this either harder or easier - When I burst I don't want to fizzle with my complicated belt for example but would love to go commando under my skirt and just let it flow. But on the other hand is this very moment of absolute peak risk what I live for so badly. Hmm... What should I choose then?</i></p>
+<p style="color:navy;"><b>Her body gets goosebumps out of excitement and anticipation. Her throat is a bit dry and her bladder empty but her heart pumps faster looking forward to another stealth-desperation-mission.</b></p>
+            <button onclick="chooseClothing(1)">Casual</button>
+            <button onclick="chooseClothing(2)">Fancy</button>
+            <button onclick="chooseClothing(3)">Sporty</button>
+        </div>
+        <div id="final-screen" style="display: none;">
+    <p>Choose your drink:</p>
+    <p>With her next destination decided, Zoe now faces a choice of refreshment to accompany her ensemble. What will she pick to quench her thirst? <br>
+<ul>
+    <strong><li>Option 1: A black Coffee - The Sophisticated Stimulant:</li></strong>
+    Zoe might choose the classic elegance of a black coffee, a beverage that promises a sharp jolt of caffeine. Served without sugar, its bitter taste is a mature choice, matching well with the clear water to keep her hydration subtly balanced. The simplicity of this drink reflects an understated confidence, perfect for the cinema's darkened halls.<br>
+    <strong><li>Option 2: A large Energy - The Bold Booster:</li></strong>
+    Alternatively, Zoe could go for a surge of vitality with a large Energy drink. The powerful combination of caffeine and sugar, topped off with a splash of water to mellow the intensity, might be just what she needs to keep her spirits high and alert through the most gripping scenes of the movie.<br>
+    <strong><li>Option 3: Cranberry juice - The Sweet Sip:</li></strong>
+    Lastly, a glass of cranberry juice presents itself as a sweet and refreshing option. The tartness of the berries, diluted with a touch of water, provides a delightful taste sensation that's both delicious and hydrating, a wise choice to keep her satiated without frequent trips to the restroom.</ul></p>
+<p style="color:orange;"><i>Decisions, decisions... The right drink could either keep me alert and on edge or provide a soothing breather. Do I want the jolt of a coffee, the rush of an energy drink, or the mellowing sip of cranberry juice? Oh, the choices!</i></p>
+<p style="color:navy;"><b>Zoe feels a tingle of excitement as she contemplates her options, her thirst a gentle reminder of the evening's subtle stakes. She smiles at the thought of her upcoming adventure, her decision on a drink the next step in her carefully orchestrated night out.</b></p>
+            <button onclick="chooseDrink(1)">Coffee</button>
+            <button onclick="chooseDrink(2)">Energy</button>
+            <button onclick="chooseDrink(3)">Cranberry</button>
+        </div>
+        <div id="summary-screen" style="display: none;">
+            <p id="summary"></p>
+            <button id="next-page-button">Go to Next Page</button>
+        </div>
+    </div>
+<script>
+    let choices = {
+        location: '',
+        clothing: '',
+        drink: ''
+    };
+
+    document.getElementById('start-button').addEventListener('click', function() {
+        document.getElementById('introduction').style.display = 'none';
+        document.getElementById('location-screen').style.display = 'block';
+        updateBars();
+    });
+
+    function chooseLocation(option) {
+        choices.location = option;
+        document.getElementById('location-screen').style.display = 'none';
+        document.getElementById('clothing-screen').style.display = 'block';
+        updateBars();
+    }
+
+    function chooseClothing(option) {
+        choices.clothing = option;
+        document.getElementById('clothing-screen').style.display = 'none';
+        document.getElementById('final-screen').style.display = 'block';
+        updateBars();
+    }
+
+    function chooseDrink(option) {
+        choices.drink = option;
+        document.getElementById('final-screen').style.display = 'none';
+        document.getElementById('summary-screen').style.display = 'block';
+        document.getElementById('summary').textContent = `Your choices: Location ${choices.location}, Outfit ${choices.clothing}, Drink ${choices.drink}`;
+        setupNextPageButton();
+    }
+
+    function setupNextPageButton() {
+        const locationMap = {1: 'pub', 2: 'cinema', 3: 'home'};
+        const clothingMap = {1: 'ca', 2: 'fa', 3: 'sp'};
+        const drinkMap = {1: 'co', 2: 'en', 3: 'cra'};
+
+        const nextPageUrl = `${locationMap[choices.location]}${clothingMap[choices.clothing]}${drinkMap[choices.drink]}.html`;
+
+        const nextPageButton = document.getElementById('next-page-button');
+        nextPageButton.onclick = function() {
+            window.location.href = nextPageUrl;
+        };
+    }
+
+    function updateBars() {
+        // Einfache Logik, um die Bars graduell zu erhöhen
+        let hydrationWidth = parseInt(document.getElementById('hydration-level-bar').style.width) + 5;
+        let bladderWidth = parseInt(document.getElementById('bladder-level-bar').style.width) + 3;
+        document.getElementById('hydration-level-bar').style.width = `${hydrationWidth}px`;
+        document.getElementById('bladder-level-bar').style.width = `${bladderWidth}px`;
+        document.getElementById('hydration-level-bar').textContent = `Hydration: ${hydrationWidth * 12}/1200 ml`;
+        document.getElementById('bladder-level-bar').textContent = `Bladder: ${bladderWidth * 9.5}/950 ml`;
+    }
+</script>
+</body>
+</html>
